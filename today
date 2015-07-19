@@ -1,0 +1,48 @@
+#!/bin/bash
+
+function today () {
+  # Load user preferences
+  [ -f ~/.todayrc ] && . ~/.todayrc
+
+  # defaults
+  TODAYROOT=${TODAYROOT:-~/today}
+  DATEFORMAT=${DATEFORMAT:-%Y-%m-%d}
+
+  export TODAYDIR="$TODAYROOT"/`date +"$DATEFORMAT"`
+  mkdir -p "$TODAYDIR"
+
+  case $1 in
+    cd|dir)
+      cd "$TODAYDIR"
+      ;;
+    help)
+cat << EOF
+Usage:
+  today
+    Create today directory and nothing else
+  today cd
+    Change directory to today's directory (only works when sourced as function)
+  today note
+    Write or amend today's notes.
+EOF
+      ;;
+    notes|note)
+      "${EDITOR:-vim}" "${TODAYDIR}/notes.md"
+      ;;
+    *)
+      echo "$TODAYDIR"
+      ;;
+  esac
+}
+
+case $(basename -- $0) in
+  today)
+    today "$@"
+    ;;
+  today-*)
+    today ${0##*today-} "$@"
+    ;;
+  *)
+    #sourced, do nothing
+    ;;
+esac
