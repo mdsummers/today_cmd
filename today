@@ -47,9 +47,11 @@ EOF
 case $(basename -- $0) in
   today)
     today "$@"
+    exit $?
     ;;
   today-*)
     today ${0##*today-} "$@"
+    exit $?
     ;;
   *)
     #sourced, do nothing
