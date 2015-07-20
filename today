@@ -38,6 +38,16 @@ EOF
       fi
       return $RETVAL
       ;;
+    open)
+      if which xdg-open >/dev/null 2>&1 ; then # x-desktop group
+        xdg-open "$TODAYDIR"
+      elif which open >/dev/null 2>&1 ; then # Mac
+        open "$TODAYDIR"
+      else
+        echo "No open command available on this platform!" >&2
+        return 1
+      fi
+      ;;
     *)
       echo "$TODAYDIR"
       ;;

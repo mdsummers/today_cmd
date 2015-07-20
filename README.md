@@ -53,6 +53,11 @@ Opens a file called `notes.md` under today's directory using the default editor.
 today notes
 ```
 
+### Open today's directory in a file browser
+```bash
+today open
+```
+
 ### Change directory to today
 ** Requires `today` to be sourced **
 ```bash
