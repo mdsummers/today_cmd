@@ -65,4 +65,5 @@ It is possible to change a couple of settings by writing a `~/.todayrc` file.
 ```bash
 DATEFORMAT='%Y/%m/%d' #defaults to %Y-%m-%d
 TODAYROOT=~/Documents/notes #defaults to ~/today
+NOTESUFFIX=.txt #defaults to .md
 ```

@@ -7,6 +7,7 @@ function today () {
   # defaults
   TODAYROOT=${TODAYROOT:-~/today}
   DATEFORMAT=${DATEFORMAT:-%Y-%m-%d}
+  NOTESUFFIX=${NOTESUFFIX:-.md}
 
   export TODAYDIR="$TODAYROOT"/`date +"$DATEFORMAT"`
   mkdir -p "$TODAYDIR"
@@ -27,7 +28,15 @@ Usage:
 EOF
       ;;
     notes|note)
-      "${EDITOR:-vim}" "${TODAYDIR}/notes.md"
+      NOTEFILE="${TODAYDIR}/notes${NOTESUFFIX}"
+      "${EDITOR:-vim}" "$NOTEFILE"
+      RETVAL=$?
+      if [ $RETVAL -ne 0 ]; then
+        echo "Failed to write note file (${NOTEFILE}): exit code ${RETVAL}" >&2
+      else
+        echo "$NOTEFILE"
+      fi
+      return $RETVAL
       ;;
     *)
       echo "$TODAYDIR"
