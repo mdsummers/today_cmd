@@ -74,8 +74,11 @@ EOF
       RETVAL=$?
       if [ $RETVAL -ne 0 ]; then
         echo "Failed to write note file (${NOTEFILE}): exit code ${RETVAL}" >&2
-      else
+      fi
+      if [ -f "$NOTEFILE" ]; then
         echo "$NOTEFILE"
+      else
+        echo "Note file not saved" >&2
       fi
       return $RETVAL
       ;;
