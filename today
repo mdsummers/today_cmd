@@ -68,6 +68,11 @@ EOF
       fi
       echo "$TODAYDIR"
       ;;
+    ls)
+      shift
+      ls "$@" -- "$TODAYDIR/"
+      return $?
+      ;;
     notes|note)
       NOTEFILE="${TODAYDIR}/notes${NOTESUFFIX}"
       "${EDITOR:-vim}" "$NOTEFILE"

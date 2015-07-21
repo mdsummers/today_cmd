@@ -80,6 +80,16 @@ $ ls -l $TODAYDIR
 lrwxr-xr-x 1 matt staff 10 Jul 21 11:52 /Users/matt/today/2015-07-21 -> 2015-07-20
 ```
 
+### List contents of today's directory
+```
+$ today ls
+notes.md
+$ today ls -l
+total 4
+-rw-r--r-- 1 matt staff 24 Jul 21 12:29 notes.md
+```
+Any arguments passed after ls are passed through directly to the system's `ls`.
+
 ## Customising today
 
 It is possible to change a number of settings by writing a `~/.todayrc` file.
