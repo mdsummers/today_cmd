@@ -10,7 +10,7 @@ function today () {
   NOTESUFFIX=${NOTESUFFIX:-.md}
 
   export TODAYDIR="$TODAYROOT"/`date +"$DATEFORMAT"`
-  mkdir -p "$TODAYDIR"
+  [ -e "$TODAYDIR" ] || mkdir -p "$TODAYDIR"
 
   case $1 in
     cd|dir)
@@ -26,6 +26,47 @@ Usage:
   today note
     Write or amend today's notes.
 EOF
+      ;;
+    last)
+      local daysago tocheck founddir
+      for daysago in {1..365}; do
+        if date --version >/dev/null 2>&1 ; then
+          tocheck=`date -d "${daysago} days ago" +"${DATEFORMAT}"`
+        else
+          tocheck=`date -v "-${daysago}d" +"${DATEFORMAT}"`
+        fi
+        if [ -n "$tocheck" ] && [ -d "${TODAYROOT}/${tocheck}" ]; then
+          echo "${TODAYROOT}/${tocheck}"
+          return 0
+        fi
+      done
+      return 1
+      ;;
+    link)
+      local lastdir=`today last`
+      if [ -z "$lastdir" ]; then
+        echo 'Unable to find last dir to link' >&2
+        return 1
+      fi
+      if ! rmdir "$TODAYDIR"; then
+        echo "Unable to remove today dir (${TODAYDIR}) for symlinking" >&2
+        return 1
+      fi
+      if ! echo "$lastdir" | fgrep -q -- "$TODAYROOT"; then
+        echo "Last dir does not contain ${TODAYROOT} - cannot continue" >&2
+        return 1
+      fi
+      # Make a relative link
+      local withoutroot=`echo "${lastdir:${#TODAYROOT}}" | sed 's@^/*@@'`
+      local relativepath="$withoutroot"
+      for slash in `fgrep -o / <<< ${withoutroot}`; do
+        relativepath="../${relativepath}"
+      done
+      if ! ln -s "$relativepath" "$TODAYDIR"; then
+        echo "Unable to make symlink (ln -s \"relativepath\" \"$TODAYDIR\")" >&2
+        return 1
+      fi
+      echo "$TODAYDIR"
       ;;
     notes|note)
       NOTEFILE="${TODAYDIR}/notes${NOTESUFFIX}"

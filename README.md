@@ -64,9 +64,25 @@ today open
 today cd
 ```
 
+### Print the last "today" directory
+It could be yesterday, it could be older (upto a year older infact)
+```
+$ today last
+/Users/matt/today/2015-07-20
+```
+
+### Not done with yesterday's directory?
+Link today's directory with the last "today" directory
+```
+$ today link
+/Users/matt/today/2015-07-21
+$ ls -l $TODAYDIR
+lrwxr-xr-x 1 matt staff 10 Jul 21 11:52 /Users/matt/today/2015-07-21 -> 2015-07-20
+```
+
 ## Customising today
 
-It is possible to change a couple of settings by writing a `~/.todayrc` file.
+It is possible to change a number of settings by writing a `~/.todayrc` file.
 ```bash
 DATEFORMAT='%Y/%m/%d' #defaults to %Y-%m-%d
 TODAYROOT=~/Documents/notes #defaults to ~/today
